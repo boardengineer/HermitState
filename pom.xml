@@ -55,6 +55,13 @@
             <systemPath>${basedir}/../_ModTheSpire/mods/SaveStateMod.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>LudicrousSpeed</groupId>
+            <artifactId>LudicrousSpeed</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../_ModTheSpire/mods/LudicrousSpeed.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>hermit</groupId>
             <artifactId>hermit</artifactId>
             <version>1.43</version>
