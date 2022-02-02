@@ -9,16 +9,12 @@ import hermit.actions.AdaptAction;
 import hermit.actions.CovetAction;
 import hermit.actions.LoneWolfAction;
 import hermit.cards.Snapshot;
-import hermit.powers.AdaptPower;
-import hermit.powers.BigShotPower;
-import hermit.powers.Concentration;
+import hermit.powers.*;
 import hermitstate.actions.AdaptActionState;
 import hermitstate.actions.CovetActionState;
 import hermitstate.actions.LoneWolfActionState;
 import hermitstate.cards.SnapshotState;
-import hermitstate.powers.AdaptPowerState;
-import hermitstate.powers.BigShotPowerState;
-import hermitstate.powers.ConcentrationState;
+import hermitstate.powers.*;
 import savestate.CardState;
 import savestate.StateFactories;
 import savestate.actions.CurrentActionState;
@@ -72,5 +68,9 @@ public class HermitState implements PostInitializeSubscriber {
                 .put(BigShotPower.POWER_ID, new PowerState.PowerFactories(power -> new BigShotPowerState(power)));
         StateFactories.powerByIdMap
                 .put(AdaptPower.POWER_ID, new PowerState.PowerFactories(power -> new AdaptPowerState(power)));
+        StateFactories.powerByIdMap
+                .put(DeterminationPower.POWER_ID, new PowerState.PowerFactories(power -> new DeterminationPowerState(power)));
+        StateFactories.powerByIdMap
+                .put(OverwhelmingPowerPower.POWER_ID, new PowerState.PowerFactories(power -> new OverwhelmingPowerPowerState(power)));
     }
 }
