@@ -6,12 +6,14 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hermit.actions.AdaptAction;
+import hermit.actions.CheatAction;
 import hermit.actions.CovetAction;
 import hermit.actions.LoneWolfAction;
 import hermit.cards.Shortfuse;
 import hermit.cards.Snapshot;
 import hermit.powers.*;
 import hermitstate.actions.AdaptActionState;
+import hermitstate.actions.CheatActionState;
 import hermitstate.actions.CovetActionState;
 import hermitstate.actions.LoneWolfActionState;
 import hermitstate.cards.ShortFuseState;
@@ -42,6 +44,8 @@ public class HermitState implements PostInitializeSubscriber {
                 .put(AdaptAction.class, new CurrentActionState.CurrentActionFactories(action -> new AdaptActionState(action)));
         StateFactories.currentActionByClassMap
                 .put(CovetAction.class, new CurrentActionState.CurrentActionFactories(action -> new CovetActionState(action)));
+        StateFactories.currentActionByClassMap
+                .put(CheatAction.class, new CurrentActionState.CurrentActionFactories(action -> new CheatActionState(action)));
 
         // Eclipse Action grid select: potion eclipse
 
@@ -95,20 +99,18 @@ public class HermitState implements PostInitializeSubscriber {
                 .put(AdaptPower.POWER_ID, new PowerState.PowerFactories(power -> new AdaptPowerState(power)));
         StateFactories.powerByIdMap
                 .put(BigShotPower.POWER_ID, new PowerState.PowerFactories(power -> new BigShotPowerState(power)));
-
-        // Bounty - card: dead or alive
-        // BrawlPower - card: brawl
-
+        StateFactories.powerByIdMap
+                .put(Bounty.POWER_ID, new PowerState.PowerFactories(power -> new BountyState(power)));
         StateFactories.powerByIdMap
                 .put(Bruise.POWER_ID, new PowerState.PowerFactories(power -> new BruiseState(power)));
-
-        // ComboPower - card: Combo
-
+        StateFactories.powerByIdMap
+                .put(BrawlPower.POWER_ID, new PowerState.PowerFactories(power -> new BrawlPowerState(power)));
+        StateFactories.powerByIdMap
+                .put(ComboPower.POWER_ID, new PowerState.PowerFactories(power -> new ComboPowerState(power)));
         StateFactories.powerByIdMap
                 .put(Concentration.POWER_ID, new PowerState.PowerFactories(power -> new ConcentrationState(power)));
         StateFactories.powerByIdMap
                 .put(DeterminationPower.POWER_ID, new PowerState.PowerFactories(power -> new DeterminationPowerState(power)));
-
         // Drained - card: NoHoldsBarred
         // EternalPower - card: EternalForm
 
