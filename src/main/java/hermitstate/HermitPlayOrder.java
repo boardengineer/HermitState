@@ -40,6 +40,7 @@ public class HermitPlayOrder {
         put(Roulette.ID, size++);
 
         // Amplify Effects and X cards
+        put(MementoCard.ID, size++);
         put(Coalescence.ID, size++);
         put(DeadOrAlive.ID, size++);
         put(EyeOfTheStorm.ID, size++);
