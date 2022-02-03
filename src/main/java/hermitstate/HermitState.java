@@ -2,6 +2,7 @@ package hermitstate;
 
 import basemod.BaseMod;
 import basemod.interfaces.PostInitializeSubscriber;
+import battleaimod.BattleAiMod;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -31,6 +32,8 @@ public class HermitState implements PostInitializeSubscriber {
         populateCurrentActionsFactory();
         populateCardFactories();
         populatePowerFactory();
+
+        BattleAiMod.cardRankMaps.add(HermitPlayOrder.CARD_RANKS);
     }
 
     private void populateCurrentActionsFactory() {
