@@ -111,8 +111,13 @@ public class HermitState implements PostInitializeSubscriber {
 
         // Drained - card: NoHoldsBarred
         // EternalPower - card: EternalForm
-        // FatalDesirePower - card: FatalDesire
-        // HighNoonPower - card: HighNoon
+
+        StateFactories.powerByIdMap
+                .put(FatalDesirePower.POWER_ID, new PowerState.PowerFactories(power -> new FatalDesirePowerState(power)));
+
+        StateFactories.powerByIdMap
+                .put(HighNoonPower.POWER_ID, new PowerState.PowerFactories(power -> new HighNoonPowerState(power)));
+
 
         StateFactories.powerByIdMap
                 .put(HorrorPower.POWER_ID, new PowerState.PowerFactories(power -> new HorrorPowerState(power)));
