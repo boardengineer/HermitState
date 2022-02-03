@@ -5,17 +5,11 @@ import basemod.interfaces.PostInitializeSubscriber;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import hermit.actions.AdaptAction;
-import hermit.actions.CheatAction;
-import hermit.actions.CovetAction;
-import hermit.actions.LoneWolfAction;
+import hermit.actions.*;
 import hermit.cards.Shortfuse;
 import hermit.cards.Snapshot;
 import hermit.powers.*;
-import hermitstate.actions.AdaptActionState;
-import hermitstate.actions.CheatActionState;
-import hermitstate.actions.CovetActionState;
-import hermitstate.actions.LoneWolfActionState;
+import hermitstate.actions.*;
 import hermitstate.cards.ShortFuseState;
 import hermitstate.cards.SnapshotState;
 import hermitstate.powers.*;
@@ -51,15 +45,15 @@ public class HermitState implements PostInitializeSubscriber {
 
         StateFactories.currentActionByClassMap
                 .put(LoneWolfAction.class, new CurrentActionState.CurrentActionFactories(action -> new LoneWolfActionState(action)));
-
-        // MagnumAction hand select: Card : Magnum
-
-        // MaliceAction hand select: Card : Malice
+        StateFactories.currentActionByClassMap
+                .put(MagnumAction.class, new CurrentActionState.CurrentActionFactories(action -> new MagnumActionState(action)));
+        StateFactories.currentActionByClassMap
+                .put(MaliceAction.class, new CurrentActionState.CurrentActionFactories(action -> new MaliceActionState(action)));
 
         // RedScarfAction grid select : relic: Red Scarf
 
-        // ReprieveAction grid select: Card : Reprieve
-
+        StateFactories.currentActionByClassMap
+                .put(ReprieveAction.class, new CurrentActionState.CurrentActionFactories(action -> new ReprieveActionState(action)));
     }
 
     private void populateCardFactories() {
@@ -111,20 +105,16 @@ public class HermitState implements PostInitializeSubscriber {
                 .put(Concentration.POWER_ID, new PowerState.PowerFactories(power -> new ConcentrationState(power)));
         StateFactories.powerByIdMap
                 .put(DeterminationPower.POWER_ID, new PowerState.PowerFactories(power -> new DeterminationPowerState(power)));
-        // Drained - card: NoHoldsBarred
-        // EternalPower - card: EternalForm
-
+        StateFactories.powerByIdMap
+                .put(Drained.POWER_ID, new PowerState.PowerFactories(power -> new DrainedState(power), json -> new DrainedState(json)));
+        StateFactories.powerByIdMap
+                .put(EternalPower.POWER_ID, new PowerState.PowerFactories(power -> new EternalPowerState(power), json -> new EternalPowerState(json)));
         StateFactories.powerByIdMap
                 .put(FatalDesirePower.POWER_ID, new PowerState.PowerFactories(power -> new FatalDesirePowerState(power)));
-
         StateFactories.powerByIdMap
                 .put(HighNoonPower.POWER_ID, new PowerState.PowerFactories(power -> new HighNoonPowerState(power)));
-
-
         StateFactories.powerByIdMap
                 .put(HorrorPower.POWER_ID, new PowerState.PowerFactories(power -> new HorrorPowerState(power)));
-
-
         StateFactories.powerByIdMap
                 .put(OverwhelmingPowerPower.POWER_ID, new PowerState.PowerFactories(power -> new OverwhelmingPowerPowerState(power)));
 
@@ -135,8 +125,9 @@ public class HermitState implements PostInitializeSubscriber {
                 .put(Rugged.POWER_ID, new PowerState.PowerFactories(power -> new RuggedState(power)));
 
         // RyeStalkPower - ?
-        // ShadowCloakPower - card: Shadow Cloak
 
+        StateFactories.powerByIdMap
+                .put(ShadowCloakPower.POWER_ID, new PowerState.PowerFactories(power -> new ShadowCloakPowerState(power)));
         StateFactories.powerByIdMap
                 .put(TakeAimPower.POWER_ID, new PowerState.PowerFactories(power -> new TakeAimPowerState(power)));
 

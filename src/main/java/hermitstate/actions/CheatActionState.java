@@ -11,7 +11,7 @@ import savestate.actions.CurrentActionState;
 
 public class CheatActionState implements CurrentActionState {
     private int onlyChoiceIndex;
-    private boolean onlyBoolean = false;
+    private boolean onlyBoolean;
     private final boolean isdeadon;
     private final int amount;
 
