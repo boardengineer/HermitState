@@ -1,15 +1,23 @@
 package hermitstate;
 
 import basemod.BaseMod;
+import basemod.ReflectionHacks;
+import basemod.interfaces.EditCharactersSubscriber;
+import basemod.interfaces.EditRelicsSubscriber;
 import basemod.interfaces.PostInitializeSubscriber;
 import battleaimod.BattleAiMod;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import hermit.actions.*;
 import hermit.cards.Shortfuse;
 import hermit.cards.Snapshot;
+import hermit.potions.Eclipse;
 import hermit.powers.*;
+import hermit.relics.BartenderGlass;
+import hermit.relics.PetGhost;
 import hermitstate.actions.*;
 import hermitstate.cards.ShortFuseState;
 import hermitstate.cards.SnapshotState;
@@ -19,10 +27,13 @@ import savestate.StateFactories;
 import savestate.actions.CurrentActionState;
 import savestate.powers.PowerState;
 
+import java.util.HashMap;
 import java.util.Optional;
 
+import static hermit.characters.hermit.Enums.COLOR_YELLOW;
+
 @SpireInitializer
-public class HermitState implements PostInitializeSubscriber {
+public class HermitState implements PostInitializeSubscriber, EditRelicsSubscriber, EditCharactersSubscriber {
     public static void initialize() {
         BaseMod.subscribe(new HermitState());
     }
@@ -34,6 +45,12 @@ public class HermitState implements PostInitializeSubscriber {
         populatePowerFactory();
 
         BattleAiMod.cardRankMaps.add(HermitPlayOrder.CARD_RANKS);
+
+        // Current behavior would make this a chat option, it won't be interesting out of the box
+        HashMap<String, AbstractRelic> sharedRelics = ReflectionHacks
+                .getPrivateStatic(RelicLibrary.class, "sharedRelics");
+
+        sharedRelics.remove(PetGhost.ID);
     }
 
     private void populateCurrentActionsFactory() {
@@ -43,18 +60,12 @@ public class HermitState implements PostInitializeSubscriber {
                 .put(CovetAction.class, new CurrentActionState.CurrentActionFactories(action -> new CovetActionState(action)));
         StateFactories.currentActionByClassMap
                 .put(CheatAction.class, new CurrentActionState.CurrentActionFactories(action -> new CheatActionState(action)));
-
-        // Eclipse Action grid select: potion eclipse
-
         StateFactories.currentActionByClassMap
                 .put(LoneWolfAction.class, new CurrentActionState.CurrentActionFactories(action -> new LoneWolfActionState(action)));
         StateFactories.currentActionByClassMap
                 .put(MagnumAction.class, new CurrentActionState.CurrentActionFactories(action -> new MagnumActionState(action)));
         StateFactories.currentActionByClassMap
                 .put(MaliceAction.class, new CurrentActionState.CurrentActionFactories(action -> new MaliceActionState(action)));
-
-        // RedScarfAction grid select : relic: Red Scarf
-
         StateFactories.currentActionByClassMap
                 .put(ReprieveAction.class, new CurrentActionState.CurrentActionFactories(action -> new ReprieveActionState(action)));
     }
@@ -120,19 +131,26 @@ public class HermitState implements PostInitializeSubscriber {
                 .put(HorrorPower.POWER_ID, new PowerState.PowerFactories(power -> new HorrorPowerState(power)));
         StateFactories.powerByIdMap
                 .put(OverwhelmingPowerPower.POWER_ID, new PowerState.PowerFactories(power -> new OverwhelmingPowerPowerState(power)));
-
-
-        // PetGhostPower - relic: pet ghost
-
+        StateFactories.powerByIdMap
+                .put(PetGhostPower.POWER_ID, new PowerState.PowerFactories(power -> new PetGhostPowerState(power), json -> new PetGhostPowerState(json)));
         StateFactories.powerByIdMap
                 .put(Rugged.POWER_ID, new PowerState.PowerFactories(power -> new RuggedState(power)));
-
-        // RyeStalkPower - ?
-
         StateFactories.powerByIdMap
                 .put(ShadowCloakPower.POWER_ID, new PowerState.PowerFactories(power -> new ShadowCloakPowerState(power)));
         StateFactories.powerByIdMap
                 .put(TakeAimPower.POWER_ID, new PowerState.PowerFactories(power -> new TakeAimPowerState(power)));
 
+    }
+
+    @Override
+    public void receiveEditRelics() {
+        BaseMod.removeRelicFromCustomPool(new PetGhost(), COLOR_YELLOW);
+        BaseMod.removeRelicFromCustomPool(new BartenderGlass(), COLOR_YELLOW);
+
+    }
+
+    @Override
+    public void receiveEditCharacters() {
+        BaseMod.removePotion(Eclipse.POTION_ID);
     }
 }
