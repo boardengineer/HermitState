@@ -18,6 +18,7 @@ import hermit.potions.Eclipse;
 import hermit.powers.*;
 import hermit.relics.BartenderGlass;
 import hermit.relics.PetGhost;
+import hermit.relics.RedScarf;
 import hermitstate.actions.*;
 import hermitstate.cards.ShortFuseState;
 import hermitstate.cards.SnapshotState;
@@ -144,9 +145,9 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
 
     @Override
     public void receiveEditRelics() {
+        BaseMod.removeRelic(new RedScarf());
         BaseMod.removeRelicFromCustomPool(new PetGhost(), COLOR_YELLOW);
         BaseMod.removeRelicFromCustomPool(new BartenderGlass(), COLOR_YELLOW);
-
     }
 
     @Override
