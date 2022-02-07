@@ -17,6 +17,7 @@ import hermit.cards.Snapshot;
 import hermit.potions.Eclipse;
 import hermit.powers.*;
 import hermit.relics.BartenderGlass;
+import hermit.relics.Horseshoe;
 import hermit.relics.PetGhost;
 import hermit.relics.RedScarf;
 import hermitstate.actions.*;
@@ -46,6 +47,9 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         populatePowerFactory();
 
         BattleAiMod.cardRankMaps.add(HermitPlayOrder.CARD_RANKS);
+
+        BattleAiMod.additionalValueFunctions
+                .add(saveState -> HermitStateElement.getElementScore(saveState));
 
         // Current behavior would make this a chat option, it won't be interesting out of the box
         HashMap<String, AbstractRelic> sharedRelics = ReflectionHacks
@@ -145,9 +149,18 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
 
     @Override
     public void receiveEditRelics() {
+        // Start of battle UI with a big selector tends to not work very well
         BaseMod.removeRelic(new RedScarf());
+
+        // Bugged to work once per restart
         BaseMod.removeRelicFromCustomPool(new PetGhost(), COLOR_YELLOW);
+
+        // Too many potions
         BaseMod.removeRelicFromCustomPool(new BartenderGlass(), COLOR_YELLOW);
+
+        // Bugged because of some debuffs being applied at 0 and not cleared, probably missing
+        // some ported logic from basemod or stdlib
+        BaseMod.removeRelic(new Horseshoe());
     }
 
     @Override
