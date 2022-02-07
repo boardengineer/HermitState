@@ -1,7 +1,6 @@
 package hermitstate;
 
 import basemod.BaseMod;
-import basemod.ReflectionHacks;
 import basemod.interfaces.EditCharactersSubscriber;
 import basemod.interfaces.EditRelicsSubscriber;
 import basemod.interfaces.PostInitializeSubscriber;
@@ -9,8 +8,6 @@ import battleaimod.BattleAiMod;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import hermit.actions.*;
 import hermit.cards.Shortfuse;
 import hermit.cards.Snapshot;
@@ -25,11 +22,11 @@ import hermitstate.cards.ShortFuseState;
 import hermitstate.cards.SnapshotState;
 import hermitstate.powers.*;
 import savestate.CardState;
+import savestate.StateElement;
 import savestate.StateFactories;
 import savestate.actions.CurrentActionState;
 import savestate.powers.PowerState;
 
-import java.util.HashMap;
 import java.util.Optional;
 
 import static hermit.characters.hermit.Enums.COLOR_YELLOW;
@@ -51,11 +48,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         BattleAiMod.additionalValueFunctions
                 .add(saveState -> HermitStateElement.getElementScore(saveState));
 
-        // Current behavior would make this a chat option, it won't be interesting out of the box
-        HashMap<String, AbstractRelic> sharedRelics = ReflectionHacks
-                .getPrivateStatic(RelicLibrary.class, "sharedRelics");
-
-        sharedRelics.remove(PetGhost.ID);
+        StateElement.ElementFactories stateFactories = new StateElement.ElementFactories(() -> new HermitStateElement(), json -> new HermitStateElement(json));
+        StateFactories.elementFactories.put(HermitStateElement.ELEMENT_KEY, stateFactories);
     }
 
     private void populateCurrentActionsFactory() {

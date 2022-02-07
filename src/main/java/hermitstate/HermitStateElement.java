@@ -1,6 +1,8 @@
 package hermitstate;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import hermit.patches.EndOfTurnPatch;
 import hermit.powers.Bounty;
 import savestate.CardState;
 import savestate.SaveState;
@@ -13,25 +15,34 @@ public class HermitStateElement implements StateElement {
 
     public static String ELEMENT_KEY = "HERMIT_MOD_STATE";
 
+    private final int deadon_count;
+
     private static final String CURSED_WEAPON_ID = "hermit:CursedWeapon";
     private static final String GOLDEN_BULLET_ID = "hermit:GoldenBullet";
     private static final String DEAD_OR_ALIVE_ID = "hermit:DeadOrAlive";
 
     public HermitStateElement() {
+        deadon_count = EndOfTurnPatch.deadon_counter;
     }
 
     public HermitStateElement(String jsonState) {
+        JsonObject parsed = new JsonParser().parse(jsonState).getAsJsonObject();
+
+        this.deadon_count = parsed.get("deadon_count").getAsInt();
     }
 
     @Override
     public String encode() {
         JsonObject statJson = new JsonObject();
 
+        statJson.addProperty("deadon_count", deadon_count);
+
         return statJson.toString();
     }
 
     @Override
     public void restore() {
+        EndOfTurnPatch.deadon_counter = deadon_count;
     }
 
     public static int getElementScore(SaveState saveState) {
