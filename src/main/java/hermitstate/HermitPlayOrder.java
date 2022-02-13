@@ -28,6 +28,8 @@ public class HermitPlayOrder {
         put(HeroicBravado.ID, size++);
         put(Reprieve.ID, size++);
 
+        put(MementoCard.ID, size++);
+
         // Big booms
         put(Showdown.ID, size++);
         put(RoundhouseKick.ID, size++);
@@ -40,7 +42,6 @@ public class HermitPlayOrder {
         put(Roulette.ID, size++);
 
         // Amplify Effects and X cards
-        put(MementoCard.ID, size++);
         put(Coalescence.ID, size++);
         put(DeadOrAlive.ID, size++);
         put(EyeOfTheStorm.ID, size++);
