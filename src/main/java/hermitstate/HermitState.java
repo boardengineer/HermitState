@@ -43,7 +43,7 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         populateCardFactories();
         populatePowerFactory();
 
-        BattleAiMod.cardRankMaps.add(HermitPlayOrder.CARD_RANKS);
+        BattleAiMod.cardPlayHeuristics.add(HermitPlayOrder.COMPARATOR);
 
         BattleAiMod.additionalValueFunctions
                 .add(saveState -> HermitStateElement.getElementScore(saveState));

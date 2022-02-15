@@ -28,6 +28,7 @@ public class MaliceActionState implements CurrentActionState {
     @Override
     public AbstractGameAction loadCurrentAction() {
         info.owner = AbstractDungeon.player;
+
         MaliceAction result = new MaliceAction(ActionState.creatureForIndex(targetIndex), info
                 .loadDamageInfo(), base);
 
