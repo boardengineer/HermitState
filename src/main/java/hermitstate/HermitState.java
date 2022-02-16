@@ -20,6 +20,7 @@ import hermit.relics.RedScarf;
 import hermitstate.actions.*;
 import hermitstate.cards.ShortFuseState;
 import hermitstate.cards.SnapshotState;
+import hermitstate.heuristics.CursesAndStatusesFirstHeuristic;
 import hermitstate.powers.*;
 import savestate.CardState;
 import savestate.StateElement;
@@ -44,6 +45,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         populatePowerFactory();
 
         BattleAiMod.cardPlayHeuristics.add(HermitPlayOrder.COMPARATOR);
+        BattleAiMod.actionHeuristics.put(CovetAction.class, new CursesAndStatusesFirstHeuristic());
+        BattleAiMod.actionHeuristics.put(MaliceAction.class, new CursesAndStatusesFirstHeuristic());
 
         BattleAiMod.additionalValueFunctions
                 .add(saveState -> HermitStateElement.getElementScore(saveState));
@@ -59,6 +62,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
                 .put(CovetAction.class, new CurrentActionState.CurrentActionFactories(action -> new CovetActionState(action)));
         StateFactories.currentActionByClassMap
                 .put(CheatAction.class, new CurrentActionState.CurrentActionFactories(action -> new CheatActionState(action)));
+        StateFactories.currentActionByClassMap
+                .put(EclipseAction.class, new CurrentActionState.CurrentActionFactories(action -> new EclipseActionState(action)));
         StateFactories.currentActionByClassMap
                 .put(LoneWolfAction.class, new CurrentActionState.CurrentActionFactories(action -> new LoneWolfActionState(action)));
         StateFactories.currentActionByClassMap
