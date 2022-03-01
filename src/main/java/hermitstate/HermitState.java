@@ -45,6 +45,7 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         populatePowerFactory();
 
         BattleAiMod.cardPlayHeuristics.add(HermitPlayOrder.COMPARATOR);
+
         BattleAiMod.actionHeuristics.put(CovetAction.class, new CursesAndStatusesFirstHeuristic());
         BattleAiMod.actionHeuristics.put(MaliceAction.class, new CursesAndStatusesFirstHeuristic());
 

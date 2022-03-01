@@ -6,6 +6,7 @@ import hermit.cards.*;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class HermitPlayOrder {
     public static final HashMap<String, Integer> CARD_RANKS = new HashMap<String, Integer>() {{
@@ -102,7 +103,48 @@ public class HermitPlayOrder {
         put(ImpendingDoom.ID, size++);
     }};
 
+    private static boolean isDeadOnAndRelevant(AbstractCard card) {
+        if (card instanceof AbstractHermitCard) {
+            if (((AbstractHermitCard) card).isDeadOnPos()) {
+                return DEAD_ON_CARDS.contains(card.cardID);
+            }
+        }
+
+        return false;
+    }
+
+    public static HashSet<String> DEAD_ON_CARDS = new HashSet<String>() {
+        {
+            this.add(Snapshot.ID);
+            this.add(CalledShot.ID);
+            this.add(Dive.ID);
+            this.add(Headshot.ID);
+            this.add(ItchyTrigger.ID);
+            this.add(Vantage.ID);
+            this.add(Cheat.ID);
+            this.add(Deadeye.ID);
+            this.add(Enervate.ID);
+            this.add(EyeOfTheStorm.ID);
+            this.add(GhostlyPresence.ID);
+            this.add(GoldenBullet.ID);
+            this.add(Scavenge.ID);
+            this.add(Vantage.ID);
+            this.add(Roughhouse.ID);
+        }
+    };
     public static final Comparator<AbstractCard> COMPARATOR = (card1, card2) -> {
+        boolean deadEye1 = isDeadOnAndRelevant(card1);
+        boolean deadEye2 = isDeadOnAndRelevant(card2);
+
+        if (deadEye1) {
+            if (!deadEye2) {
+                return -1;
+            }
+        } else if (deadEye2) {
+            return 1;
+        }
+
+
         if (CARD_RANKS.containsKey(card1.cardID) && CARD_RANKS
                 .containsKey(card2.cardID)) {
             return CARD_RANKS.get(card1.cardID) - CARD_RANKS

@@ -3,6 +3,7 @@ package hermitstate;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hermit.patches.EndOfTurnPatch;
+import hermit.patches.VigorPatch;
 import hermit.powers.Bounty;
 import savestate.CardState;
 import savestate.SaveState;
@@ -16,6 +17,8 @@ public class HermitStateElement implements StateElement {
     public static String ELEMENT_KEY = "HERMIT_MOD_STATE";
 
     private final int deadon_count;
+    private final boolean vigorThisRun;
+    private final boolean vigorIsActive;
 
     private static final String CURSED_WEAPON_ID = "hermit:CursedWeapon";
     private static final String GOLDEN_BULLET_ID = "hermit:GoldenBullet";
@@ -23,12 +26,16 @@ public class HermitStateElement implements StateElement {
 
     public HermitStateElement() {
         deadon_count = EndOfTurnPatch.deadon_counter;
+        this.vigorThisRun = VigorPatch.thisRun;
+        this.vigorIsActive = VigorPatch.isActive;
     }
 
     public HermitStateElement(String jsonState) {
         JsonObject parsed = new JsonParser().parse(jsonState).getAsJsonObject();
 
         this.deadon_count = parsed.get("deadon_count").getAsInt();
+        this.vigorIsActive = parsed.get("deadon_count").getAsBoolean();
+        this.vigorThisRun = parsed.get("deadon_count").getAsBoolean();
     }
 
     @Override
@@ -36,6 +43,8 @@ public class HermitStateElement implements StateElement {
         JsonObject statJson = new JsonObject();
 
         statJson.addProperty("deadon_count", deadon_count);
+        statJson.addProperty("vigor_this_run", vigorThisRun);
+        statJson.addProperty("vigor_is_active", vigorIsActive);
 
         return statJson.toString();
     }
@@ -43,6 +52,8 @@ public class HermitStateElement implements StateElement {
     @Override
     public void restore() {
         EndOfTurnPatch.deadon_counter = deadon_count;
+        VigorPatch.isActive = vigorIsActive;
+        VigorPatch.thisRun = vigorThisRun;
     }
 
     public static int getElementScore(SaveState saveState) {
