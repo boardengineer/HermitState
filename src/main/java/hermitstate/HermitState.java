@@ -25,6 +25,7 @@ import hermitstate.powers.*;
 import savestate.CardState;
 import savestate.StateElement;
 import savestate.StateFactories;
+import savestate.actions.ActionState;
 import savestate.actions.CurrentActionState;
 import savestate.powers.PowerState;
 
@@ -41,6 +42,7 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
     @Override
     public void receivePostInitialize() {
         populateCurrentActionsFactory();
+        populateActionsFactory();
         populateCardFactories();
         populatePowerFactory();
 
@@ -54,6 +56,11 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
 
         StateElement.ElementFactories stateFactories = new StateElement.ElementFactories(() -> new HermitStateElement(), json -> new HermitStateElement(json));
         StateFactories.elementFactories.put(HermitStateElement.ELEMENT_KEY, stateFactories);
+    }
+
+    private void populateActionsFactory() {
+        StateFactories.actionByClassMap
+                .put(AdaptAction.class, new ActionState.ActionFactories(action -> new AdaptActionState(action)));
     }
 
     private void populateCurrentActionsFactory() {

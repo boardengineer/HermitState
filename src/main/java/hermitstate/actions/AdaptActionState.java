@@ -5,9 +5,10 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import hermit.actions.AdaptAction;
+import savestate.actions.ActionState;
 import savestate.actions.CurrentActionState;
 
-public class AdaptActionState implements CurrentActionState {
+public class AdaptActionState implements CurrentActionState, ActionState {
     private final boolean isRandom;
     private final boolean anyNumber;
     private final boolean canPickZero;
@@ -43,5 +44,10 @@ public class AdaptActionState implements CurrentActionState {
                 _instance.isDone = false;
             }
         }
+    }
+
+    @Override
+    public AbstractGameAction loadAction() {
+        return new AdaptAction(block, isRandom, anyNumber, canPickZero);
     }
 }
