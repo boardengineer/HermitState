@@ -5,9 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import hermit.cards.Snapshot;
-import savestate.CardState;
 
-public class SnapshotState extends CardState {
+public class SnapshotState extends AbstractHermitCardState {
     private final boolean wasDeadOn;
     private final int prev_cost;
 

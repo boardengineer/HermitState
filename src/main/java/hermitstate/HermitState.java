@@ -9,6 +9,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hermit.actions.*;
+import hermit.cards.AbstractHermitCard;
 import hermit.cards.Shortfuse;
 import hermit.cards.Snapshot;
 import hermit.potions.Eclipse;
@@ -18,6 +19,7 @@ import hermit.relics.Horseshoe;
 import hermit.relics.PetGhost;
 import hermit.relics.RedScarf;
 import hermitstate.actions.*;
+import hermitstate.cards.AbstractHermitCardState;
 import hermitstate.cards.ShortFuseState;
 import hermitstate.cards.SnapshotState;
 import hermitstate.heuristics.CursesAndStatusesFirstHeuristic;
@@ -110,8 +112,26 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
             return Optional.empty();
         });
 
+        CardState.CardFactories cardFactories = new CardState.CardFactories(card -> {
+            if (card instanceof AbstractHermitCard) {
+                return Optional.of(new AbstractHermitCardState(card));
+            }
+            return Optional.empty();
+        }, json -> {
+            JsonObject parsed = new JsonParser().parse(json).getAsJsonObject();
+            String type = "";
+            if (parsed.has("type")) {
+                type = parsed.get("type").getAsString();
+            }
+            if (type.equals(AbstractHermitCardState.TYPE_KEY)) {
+                return Optional.of(new AbstractHermitCardState(json));
+            }
+            return Optional.empty();
+        });
+
         StateFactories.cardFactories.add(snapshotFactories);
         StateFactories.cardFactories.add(shortFuseFactories);
+        StateFactories.cardFactories.add(cardFactories);
     }
 
     private void populatePowerFactory() {

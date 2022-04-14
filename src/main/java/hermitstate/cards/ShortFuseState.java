@@ -5,9 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import hermit.cards.Shortfuse;
-import savestate.CardState;
 
-public class ShortFuseState extends CardState {
+public class ShortFuseState extends AbstractHermitCardState {
     private final int cost_revert;
 
     public ShortFuseState(AbstractCard card) {
