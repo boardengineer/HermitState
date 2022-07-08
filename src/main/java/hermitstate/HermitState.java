@@ -85,40 +85,30 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
     }
 
     private void populateCardFactories() {
-        // TODO add a single lookup instead of a bunch of conditionals
-        CardState.CardFactories snapshotFactories = new CardState.CardFactories(card -> {
+        CardState.CardFactories allHermitCardFactories = new CardState.CardFactories(card -> {
             if (card instanceof Snapshot) {
                 return Optional.of(new SnapshotState(card));
             }
+
+            if (card instanceof Shortfuse) {
+                return Optional.of(new ShortFuseState(card));
+            }
+
+            if (card instanceof AbstractHermitCard) {
+                return Optional.of(new AbstractHermitCardState(card));
+            }
+
             return Optional.empty();
         }, json -> {
             JsonObject parsed = new JsonParser().parse(json).getAsJsonObject();
             if (parsed.get("card_id").getAsString().equals(Snapshot.ID)) {
                 return Optional.of(new SnapshotState(json));
             }
-            return Optional.empty();
-        });
 
-        CardState.CardFactories shortFuseFactories = new CardState.CardFactories(card -> {
-            if (card instanceof Shortfuse) {
-                return Optional.of(new ShortFuseState(card));
-            }
-            return Optional.empty();
-        }, json -> {
-            JsonObject parsed = new JsonParser().parse(json).getAsJsonObject();
             if (parsed.get("card_id").getAsString().equals(Shortfuse.ID)) {
                 return Optional.of(new ShortFuseState(json));
             }
-            return Optional.empty();
-        });
 
-        CardState.CardFactories cardFactories = new CardState.CardFactories(card -> {
-            if (card instanceof AbstractHermitCard) {
-                return Optional.of(new AbstractHermitCardState(card));
-            }
-            return Optional.empty();
-        }, json -> {
-            JsonObject parsed = new JsonParser().parse(json).getAsJsonObject();
             String type = "";
             if (parsed.has("type")) {
                 type = parsed.get("type").getAsString();
@@ -126,12 +116,11 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
             if (type.equals(AbstractHermitCardState.TYPE_KEY)) {
                 return Optional.of(new AbstractHermitCardState(json));
             }
+
             return Optional.empty();
         });
 
-        StateFactories.cardFactories.add(snapshotFactories);
-        StateFactories.cardFactories.add(shortFuseFactories);
-        StateFactories.cardFactories.add(cardFactories);
+        StateFactories.cardFactories.add(allHermitCardFactories);
     }
 
     private void populatePowerFactory() {
