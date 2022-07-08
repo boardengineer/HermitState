@@ -6,8 +6,6 @@ import basemod.interfaces.EditRelicsSubscriber;
 import basemod.interfaces.PostInitializeSubscriber;
 import battleaimod.BattleAiMod;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import hermit.actions.*;
 import hermit.cards.AbstractHermitCard;
 import hermit.cards.Shortfuse;
@@ -30,8 +28,6 @@ import savestate.StateFactories;
 import savestate.actions.ActionState;
 import savestate.actions.CurrentActionState;
 import savestate.powers.PowerState;
-
-import java.util.Optional;
 
 import static hermit.characters.hermit.Enums.COLOR_YELLOW;
 
@@ -85,42 +81,20 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
     }
 
     private void populateCardFactories() {
-        CardState.CardFactories allHermitCardFactories = new CardState.CardFactories(card -> {
-            if (card instanceof Snapshot) {
-                return Optional.of(new SnapshotState(card));
-            }
+        StateFactories.cardFactoriesByType
+                .put(Snapshot.class, new CardState.CardFactories(card -> new SnapshotState(card), json -> new SnapshotState(json)));
+        StateFactories.cardFactoriesByCardId
+                .put(Snapshot.ID, new CardState.CardFactories(card -> new SnapshotState(card), json -> new SnapshotState(json)));
 
-            if (card instanceof Shortfuse) {
-                return Optional.of(new ShortFuseState(card));
-            }
+        StateFactories.cardFactoriesByType
+                .put(Shortfuse.class, new CardState.CardFactories(card -> new ShortFuseState(card), json -> new ShortFuseState(json)));
+        StateFactories.cardFactoriesByCardId
+                .put(Shortfuse.ID, new CardState.CardFactories(card -> new ShortFuseState(card), json -> new ShortFuseState(json)));
 
-            if (card instanceof AbstractHermitCard) {
-                return Optional.of(new AbstractHermitCardState(card));
-            }
-
-            return Optional.empty();
-        }, json -> {
-            JsonObject parsed = new JsonParser().parse(json).getAsJsonObject();
-            if (parsed.get("card_id").getAsString().equals(Snapshot.ID)) {
-                return Optional.of(new SnapshotState(json));
-            }
-
-            if (parsed.get("card_id").getAsString().equals(Shortfuse.ID)) {
-                return Optional.of(new ShortFuseState(json));
-            }
-
-            String type = "";
-            if (parsed.has("type")) {
-                type = parsed.get("type").getAsString();
-            }
-            if (type.equals(AbstractHermitCardState.TYPE_KEY)) {
-                return Optional.of(new AbstractHermitCardState(json));
-            }
-
-            return Optional.empty();
-        });
-
-        StateFactories.cardFactories.add(allHermitCardFactories);
+        StateFactories.cardFactoriesByType
+                .put(AbstractHermitCard.class, new CardState.CardFactories(card -> new AbstractHermitCardState(card), json -> new AbstractHermitCardState(json)));
+        StateFactories.cardFactoriesByTypeName
+                .put(AbstractHermitCardState.TYPE_KEY, new CardState.CardFactories(card -> new AbstractHermitCardState(card), json -> new AbstractHermitCardState(json)));
     }
 
     private void populatePowerFactory() {
