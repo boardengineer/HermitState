@@ -8,6 +8,7 @@ import hermit.powers.Bounty;
 import savestate.CardState;
 import savestate.SaveState;
 import savestate.StateElement;
+import savestate.StateFactories;
 
 import java.util.HashMap;
 
@@ -70,7 +71,7 @@ public class HermitStateElement implements StateElement {
 
 
         for (CardState card : saveState.playerState.hand) {
-            switch (card.cardId) {
+            switch (StateFactories.cardIds[card.cardIdIndex]) {
                 case CURSED_WEAPON_ID:
                     cursedWeaponDamage += card.misc;
                     break;
@@ -86,7 +87,7 @@ public class HermitStateElement implements StateElement {
         }
 
         for (CardState card : saveState.playerState.drawPile) {
-            switch (card.cardId) {
+            switch (StateFactories.cardIds[card.cardIdIndex]) {
                 case CURSED_WEAPON_ID:
                     cursedWeaponDamage += card.misc;
                     break;
@@ -102,7 +103,7 @@ public class HermitStateElement implements StateElement {
         }
 
         for (CardState card : saveState.playerState.discardPile) {
-            switch (card.cardId) {
+            switch (StateFactories.cardIds[card.cardIdIndex]) {
                 case CURSED_WEAPON_ID:
                     cursedWeaponDamage += card.misc;
                     break;
@@ -118,7 +119,7 @@ public class HermitStateElement implements StateElement {
         }
 
         for (CardState card : saveState.playerState.exhaustPile) {
-            switch (card.cardId) {
+            switch (StateFactories.cardIds[card.cardIdIndex]) {
                 case CURSED_WEAPON_ID:
                     cursedWeaponDamage += card.misc;
                     break;
