@@ -41,6 +41,18 @@ public class AbstractHermitCardState extends CardState {
                                                         .getAsBoolean();
     }
 
+    public AbstractHermitCardState(JsonObject cardJson) {
+        super(cardJson);
+
+        this.trig_deadon = cardJson.get("trig_deadon").getAsBoolean();
+        this.defaultSecondMagicNumber = cardJson.get("defaultSecondMagicNumber").getAsInt();
+        this.defaultBaseSecondMagicNumber = cardJson.get("defaultBaseSecondMagicNumber").getAsInt();
+        this.upgradedDefaultSecondMagicNumber = cardJson.get("upgradedDefaultSecondMagicNumber")
+                                                      .getAsBoolean();
+        this.isDefaultSecondMagicNumberModified = cardJson.get("isDefaultSecondMagicNumberModified")
+                                                        .getAsBoolean();
+    }
+
     @Override
     public AbstractCard loadCard() {
         AbstractHermitCard result = (AbstractHermitCard) super.loadCard();
@@ -69,5 +81,20 @@ public class AbstractHermitCardState extends CardState {
         parsed.addProperty("type", TYPE_KEY);
 
         return parsed.toString();
+    }
+
+    @Override
+    public JsonObject jsonEncode() {
+        JsonObject result = super.jsonEncode();
+
+        result.addProperty("trig_deadon", trig_deadon);
+        result.addProperty("defaultSecondMagicNumber", defaultSecondMagicNumber);
+        result.addProperty("defaultBaseSecondMagicNumber", defaultBaseSecondMagicNumber);
+        result.addProperty("upgradedDefaultSecondMagicNumber", upgradedDefaultSecondMagicNumber);
+        result.addProperty("isDefaultSecondMagicNumberModified", isDefaultSecondMagicNumberModified);
+
+        result.addProperty("type", TYPE_KEY);
+
+        return result;
     }
 }

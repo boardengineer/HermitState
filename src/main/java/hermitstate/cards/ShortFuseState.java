@@ -23,6 +23,12 @@ public class ShortFuseState extends AbstractHermitCardState {
         cost_revert = parsed.get("cost_revert").getAsInt();
     }
 
+    public ShortFuseState(JsonObject cardJson) {
+        super(cardJson);
+
+        cost_revert = cardJson.get("cost_revert").getAsInt();
+    }
+
     @Override
     public AbstractCard loadCard() {
         AbstractCard result = super.loadCard();
@@ -41,5 +47,14 @@ public class ShortFuseState extends AbstractHermitCardState {
         parsed.addProperty("cost_revert", cost_revert);
 
         return parsed.toString();
+    }
+
+    @Override
+    public JsonObject jsonEncode() {
+        JsonObject result = super.jsonEncode();
+
+        result.addProperty("cost_revert", cost_revert);
+
+        return result;
     }
 }

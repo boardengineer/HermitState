@@ -23,6 +23,12 @@ public class DrainedState extends PowerState {
         total = parsed.get("total").getAsByte();
     }
 
+    public DrainedState(JsonObject powerJson) {
+        super(powerJson);
+
+        total = powerJson.get("total").getAsByte();
+    }
+
     @Override
     public AbstractPower loadPower(AbstractCreature targetAndSource) {
         Drained result =  new Drained(targetAndSource, targetAndSource, amount);
@@ -39,5 +45,14 @@ public class DrainedState extends PowerState {
         parsed.addProperty("total", total);
 
         return parsed.toString();
+    }
+
+    @Override
+    public JsonObject jsonEncode() {
+        JsonObject result = super.jsonEncode();
+
+        result.addProperty("total", total);
+
+        return result;
     }
 }

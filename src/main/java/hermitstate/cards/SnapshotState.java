@@ -26,6 +26,13 @@ public class SnapshotState extends AbstractHermitCardState {
         prev_cost = parsed.get("prev_cost").getAsInt();
     }
 
+    public SnapshotState(JsonObject cardJson) {
+        super(cardJson);
+
+        wasDeadOn = cardJson.get("wasDeadOn").getAsBoolean();
+        prev_cost = cardJson.get("prev_cost").getAsInt();
+    }
+
     @Override
     public AbstractCard loadCard() {
         AbstractCard result = super.loadCard();
@@ -46,5 +53,15 @@ public class SnapshotState extends AbstractHermitCardState {
         parsed.addProperty("prev_cost", prev_cost);
 
         return parsed.toString();
+    }
+
+    @Override
+    public JsonObject jsonEncode() {
+        JsonObject result = super.jsonEncode();
+
+        result.addProperty("wasDeadOn", wasDeadOn);
+        result.addProperty("prev_cost", prev_cost);
+
+        return result;
     }
 }

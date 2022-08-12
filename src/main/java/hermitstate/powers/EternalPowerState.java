@@ -30,6 +30,12 @@ public class EternalPowerState extends PowerState {
         total = parsed.get("total").getAsByte();
     }
 
+    public EternalPowerState(JsonObject powerJson) {
+        super(powerJson);
+
+        total = powerJson.get("total").getAsByte();
+    }
+
     @Override
     public AbstractPower loadPower(AbstractCreature targetAndSource) {
         EternalPower result = new EternalPower(targetAndSource, targetAndSource, amount);
@@ -47,6 +53,15 @@ public class EternalPowerState extends PowerState {
         parsed.addProperty("total", total);
 
         return parsed.toString();
+    }
+
+    @Override
+    public JsonObject jsonEncode() {
+        JsonObject result = super.jsonEncode();
+
+        result.addProperty("total", total);
+
+        return result;
     }
 
     // Patch the way eternal power counts usage, updating amount in updateDescription is

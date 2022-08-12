@@ -52,7 +52,7 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         BattleAiMod.additionalValueFunctions
                 .add(saveState -> HermitStateElement.getElementScore(saveState));
 
-        StateElement.ElementFactories stateFactories = new StateElement.ElementFactories(() -> new HermitStateElement(), json -> new HermitStateElement(json));
+        StateElement.ElementFactories stateFactories = new StateElement.ElementFactories(() -> new HermitStateElement(), json -> new HermitStateElement(json), jsonObject -> new HermitStateElement(jsonObject));
         StateFactories.elementFactories.put(HermitStateElement.ELEMENT_KEY, stateFactories);
     }
 
@@ -81,20 +81,20 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
     }
 
     private void populateCardFactories() {
+        CardState.CardFactories snapshotFactories = new CardState.CardFactories(card -> new SnapshotState(card), json -> new SnapshotState(json), jsonObject -> new SnapshotState(jsonObject));
         StateFactories.cardFactoriesByType
-                .put(Snapshot.class, new CardState.CardFactories(card -> new SnapshotState(card), json -> new SnapshotState(json)));
+                .put(Snapshot.class, snapshotFactories);
         StateFactories.cardFactoriesByCardId
-                .put(Snapshot.ID, new CardState.CardFactories(card -> new SnapshotState(card), json -> new SnapshotState(json)));
+                .put(Snapshot.ID, snapshotFactories);
 
-        StateFactories.cardFactoriesByType
-                .put(Shortfuse.class, new CardState.CardFactories(card -> new ShortFuseState(card), json -> new ShortFuseState(json)));
-        StateFactories.cardFactoriesByCardId
-                .put(Shortfuse.ID, new CardState.CardFactories(card -> new ShortFuseState(card), json -> new ShortFuseState(json)));
+        CardState.CardFactories shortFuseFactories = new CardState.CardFactories(card -> new ShortFuseState(card), json -> new ShortFuseState(json), jsonObject -> new ShortFuseState(jsonObject));
+        StateFactories.cardFactoriesByType.put(Shortfuse.class, shortFuseFactories);
+        StateFactories.cardFactoriesByCardId.put(Shortfuse.ID, shortFuseFactories);
 
-        StateFactories.cardFactoriesByType
-                .put(AbstractHermitCard.class, new CardState.CardFactories(card -> new AbstractHermitCardState(card), json -> new AbstractHermitCardState(json)));
+        CardState.CardFactories hermitCardFactories = new CardState.CardFactories(card -> new AbstractHermitCardState(card), json -> new AbstractHermitCardState(json), jsonObject -> new AbstractHermitCardState(jsonObject));
+        StateFactories.cardFactoriesByType.put(AbstractHermitCard.class, hermitCardFactories);
         StateFactories.cardFactoriesByTypeName
-                .put(AbstractHermitCardState.TYPE_KEY, new CardState.CardFactories(card -> new AbstractHermitCardState(card), json -> new AbstractHermitCardState(json)));
+                .put(AbstractHermitCardState.TYPE_KEY, hermitCardFactories);
     }
 
     private void populatePowerFactory() {
@@ -115,9 +115,9 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         StateFactories.powerByIdMap
                 .put(DeterminationPower.POWER_ID, new PowerState.PowerFactories(power -> new DeterminationPowerState(power)));
         StateFactories.powerByIdMap
-                .put(Drained.POWER_ID, new PowerState.PowerFactories(power -> new DrainedState(power), json -> new DrainedState(json)));
+                .put(Drained.POWER_ID, new PowerState.PowerFactories(power -> new DrainedState(power), json -> new DrainedState(json), jsonObject -> new DrainedState(jsonObject)));
         StateFactories.powerByIdMap
-                .put(EternalPower.POWER_ID, new PowerState.PowerFactories(power -> new EternalPowerState(power), json -> new EternalPowerState(json)));
+                .put(EternalPower.POWER_ID, new PowerState.PowerFactories(power -> new EternalPowerState(power), json -> new EternalPowerState(json), jsonObject -> new EternalPowerState(jsonObject)));
         StateFactories.powerByIdMap
                 .put(FatalDesirePower.POWER_ID, new PowerState.PowerFactories(power -> new FatalDesirePowerState(power)));
         StateFactories.powerByIdMap
@@ -127,7 +127,7 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         StateFactories.powerByIdMap
                 .put(OverwhelmingPowerPower.POWER_ID, new PowerState.PowerFactories(power -> new OverwhelmingPowerPowerState(power)));
         StateFactories.powerByIdMap
-                .put(PetGhostPower.POWER_ID, new PowerState.PowerFactories(power -> new PetGhostPowerState(power), json -> new PetGhostPowerState(json)));
+                .put(PetGhostPower.POWER_ID, new PowerState.PowerFactories(power -> new PetGhostPowerState(power), json -> new PetGhostPowerState(json), jsonObject -> new PetGhostPowerState(jsonObject)));
         StateFactories.powerByIdMap
                 .put(Rugged.POWER_ID, new PowerState.PowerFactories(power -> new RuggedState(power)));
         StateFactories.powerByIdMap

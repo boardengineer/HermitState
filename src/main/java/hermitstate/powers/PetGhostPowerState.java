@@ -25,6 +25,12 @@ public class PetGhostPowerState extends PowerState {
         prepDeath = parsed.get("prepDeath").getAsBoolean();
     }
 
+    public PetGhostPowerState(JsonObject powerJson) {
+        super(powerJson);
+
+        prepDeath = powerJson.get("prepDeath").getAsBoolean();
+    }
+
     @Override
     public AbstractPower loadPower(AbstractCreature targetAndSource) {
         PetGhostPower result = new PetGhostPower(targetAndSource, amount);
@@ -41,5 +47,14 @@ public class PetGhostPowerState extends PowerState {
         parsed.addProperty("prepDeath", prepDeath);
 
         return parsed.toString();
+    }
+
+    @Override
+    public JsonObject jsonEncode() {
+        JsonObject result = super.jsonEncode();
+
+        result.addProperty("prepDeath", prepDeath);
+
+        return result;
     }
 }

@@ -39,6 +39,12 @@ public class HermitStateElement implements StateElement {
         this.vigorThisRun = parsed.get("deadon_count").getAsBoolean();
     }
 
+    public HermitStateElement(JsonObject elementJson) {
+        this.deadon_count = elementJson.get("deadon_count").getAsInt();
+        this.vigorIsActive = elementJson.get("deadon_count").getAsBoolean();
+        this.vigorThisRun = elementJson.get("deadon_count").getAsBoolean();
+    }
+
     @Override
     public String encode() {
         JsonObject statJson = new JsonObject();
@@ -48,6 +54,17 @@ public class HermitStateElement implements StateElement {
         statJson.addProperty("vigor_is_active", vigorIsActive);
 
         return statJson.toString();
+    }
+
+    @Override
+    public JsonObject jsonEncode() {
+        JsonObject statJson = new JsonObject();
+
+        statJson.addProperty("deadon_count", deadon_count);
+        statJson.addProperty("vigor_this_run", vigorThisRun);
+        statJson.addProperty("vigor_is_active", vigorIsActive);
+
+        return statJson;
     }
 
     @Override
