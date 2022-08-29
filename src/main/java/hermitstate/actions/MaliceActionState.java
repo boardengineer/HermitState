@@ -13,7 +13,7 @@ import savestate.actions.CurrentActionState;
 
 public class MaliceActionState implements CurrentActionState {
     private final DamageInfoState info;
-    private final int base;
+    private final int []base;
     private final int targetIndex;
 
     public MaliceActionState(AbstractGameAction action) {

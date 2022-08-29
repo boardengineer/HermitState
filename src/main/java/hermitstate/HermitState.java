@@ -109,6 +109,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         StateFactories.powerByIdMap
                 .put(BrawlPower.POWER_ID, new PowerState.PowerFactories(power -> new BrawlPowerState(power)));
         StateFactories.powerByIdMap
+                .put(CoalescencePower.POWER_ID, new PowerState.PowerFactories(power -> new CoalescencePowerState(power)));
+        StateFactories.powerByIdMap
                 .put(ComboPower.POWER_ID, new PowerState.PowerFactories(power -> new ComboPowerState(power)));
         StateFactories.powerByIdMap
                 .put(Concentration.POWER_ID, new PowerState.PowerFactories(power -> new ConcentrationState(power)));
@@ -124,6 +126,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
                 .put(HighNoonPower.POWER_ID, new PowerState.PowerFactories(power -> new HighNoonPowerState(power)));
         StateFactories.powerByIdMap
                 .put(HorrorPower.POWER_ID, new PowerState.PowerFactories(power -> new HorrorPowerState(power)));
+        StateFactories.powerByIdMap
+                .put(MaintenanceStrikePower.POWER_ID, new PowerState.PowerFactories(power -> new MaintenanceStrikePowerState(power)));
         StateFactories.powerByIdMap
                 .put(OverwhelmingPowerPower.POWER_ID, new PowerState.PowerFactories(power -> new OverwhelmingPowerPowerState(power)));
         StateFactories.powerByIdMap

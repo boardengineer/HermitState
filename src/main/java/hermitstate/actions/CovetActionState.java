@@ -8,7 +8,7 @@ import hermit.actions.CovetAction;
 import savestate.actions.CurrentActionState;
 
 public class CovetActionState implements CurrentActionState {
-    private final boolean extra_draw;
+    private final int extra_draw;
 
     public CovetActionState(AbstractGameAction action) {
         this.extra_draw = ReflectionHacks.getPrivate(action, CovetAction.class, "extra_draw");

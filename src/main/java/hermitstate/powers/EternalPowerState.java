@@ -6,8 +6,6 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.megacrit.cardcrawl.actions.utility.UseCardAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -66,22 +64,22 @@ public class EternalPowerState extends PowerState {
 
     // Patch the way eternal power counts usage, updating amount in updateDescription is
     // problematic.
-    @SpirePatch(clz = EternalPower.class, method = "onUseCard")
-    public static class UpdateOnUseCard {
-        @SpirePrefixPatch
-        public static SpireReturn onUseCard(EternalPower power, AbstractCard card, UseCardAction action) {
-            if (power.amount > 0) {
-                power.flash();
-
-                power.amount = power.total - AbstractDungeon.actionManager.cardsPlayedThisTurn
-                        .size();
-
-                power.updateDescription();
-            }
-
-            return SpireReturn.Return(null);
-        }
-    }
+//    @SpirePatch(clz = EternalPower.class, method = "onUseCard")
+//    public static class UpdateOnUseCard {
+//        @SpirePrefixPatch
+//        public static SpireReturn onUseCard(EternalPower power, AbstractCard card, UseCardAction action) {
+//            if (power.amount > 0) {
+//                power.flash();
+//
+//                power.amount = power.total - AbstractDungeon.actionManager.cardsPlayedThisTurn
+//                        .size();
+//
+//                power.updateDescription();
+//            }
+//
+//            return SpireReturn.Return(null);
+//        }
+//    }
 
     @SpirePatch(clz = EternalPower.class, method = "updateDescription")
     public static class NoAmountChangeInUpdateDescriptionPatch {
@@ -108,14 +106,14 @@ public class EternalPowerState extends PowerState {
         }
     }
 
-    @SpirePatch(clz = EternalPower.class, method = "stackPower")
-    public static class UpdateOnStackPowerPatch {
-        @SpirePostfixPatch
-        public static void updateDescription(EternalPower power, int stackAmount) {
-            power.amount = power.total - AbstractDungeon.actionManager.cardsPlayedThisTurn
-                    .size();
-        }
-    }
+//    @SpirePatch(clz = EternalPower.class, method = "stackPower")
+//    public static class UpdateOnStackPowerPatch {
+//        @SpirePostfixPatch
+//        public static void updateDescription(EternalPower power, int stackAmount) {
+//            power.amount = power.total - AbstractDungeon.actionManager.cardsPlayedThisTurn
+//                    .size();
+//        }
+//    }
 
     @SpirePatch(clz = EternalPower.class, method = SpirePatch.CONSTRUCTOR)
     public static class UpdateOnConstructorPatch {

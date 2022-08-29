@@ -8,12 +8,16 @@ import hermit.actions.ReprieveAction;
 import savestate.actions.CurrentActionState;
 
 public class ReprieveActionState implements CurrentActionState {
+    private final int curseTreshold;
+
     public ReprieveActionState(AbstractGameAction action) {
+        this.curseTreshold = ReflectionHacks
+                .getPrivate(action, ReprieveAction.class, "curseTreshold");
     }
 
     @Override
     public AbstractGameAction loadCurrentAction() {
-        ReprieveAction result = new ReprieveAction();
+        ReprieveAction result = new ReprieveAction(curseTreshold);
 
         // This should make the action only trigger the second half of the update
         ReflectionHacks

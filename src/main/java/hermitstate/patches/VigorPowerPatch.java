@@ -23,7 +23,7 @@ public class VigorPowerPatch {
         public static void Prefix(boolean shouldLog) {
             GameActionManager m = AbstractDungeon.actionManager;
             if (m.actions.isEmpty() && m.preTurnActions.isEmpty() && m.cardQueue
-                    .isEmpty() && VigorPatch.isActive) {
+                    .isEmpty() && (VigorPatch.isActive > 0)) {
                 VigorPatch.thisRun = true;
             }
         }
@@ -41,7 +41,7 @@ public class VigorPowerPatch {
                             .addToBottom(new ApplyPowerAction(p, p, new VigorPower(p, pow.amount), pow.amount));
                 }
                 VigorPatch.thisRun = false;
-                VigorPatch.isActive = false;
+                VigorPatch.isActive = 0;
             }
 
         }
