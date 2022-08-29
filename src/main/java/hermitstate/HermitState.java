@@ -65,6 +65,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         StateFactories.currentActionByClassMap
                 .put(AdaptAction.class, new CurrentActionState.CurrentActionFactories(action -> new AdaptActionState(action)));
         StateFactories.currentActionByClassMap
+                .put(BodyArmorAction.class, new CurrentActionState.CurrentActionFactories(action -> new BodyArmorActionState(action)));
+        StateFactories.currentActionByClassMap
                 .put(CovetAction.class, new CurrentActionState.CurrentActionFactories(action -> new CovetActionState(action)));
         StateFactories.currentActionByClassMap
                 .put(CheatAction.class, new CurrentActionState.CurrentActionFactories(action -> new CheatActionState(action)));
