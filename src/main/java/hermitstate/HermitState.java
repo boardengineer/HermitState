@@ -139,6 +139,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
         StateFactories.powerByIdMap
                 .put(ShadowCloakPower.POWER_ID, new PowerState.PowerFactories(power -> new ShadowCloakPowerState(power)));
         StateFactories.powerByIdMap
+                .put(SnipePower.POWER_ID, new PowerState.PowerFactories(power -> new SnipePowerState(power)));
+        StateFactories.powerByIdMap
                 .put(TakeAimPower.POWER_ID, new PowerState.PowerFactories(power -> new TakeAimPowerState(power)));
 
     }
