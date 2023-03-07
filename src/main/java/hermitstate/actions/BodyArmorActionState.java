@@ -8,7 +8,7 @@ import hermit.actions.BodyArmorAction;
 import savestate.actions.CurrentActionState;
 
 public class BodyArmorActionState implements CurrentActionState {
-    private int block;
+    private final int block;
 
     public BodyArmorActionState(AbstractGameAction action) {
         this.block = ReflectionHacks.getPrivate(action, BodyArmorAction.class, "block");
@@ -16,7 +16,12 @@ public class BodyArmorActionState implements CurrentActionState {
 
     @Override
     public AbstractGameAction loadCurrentAction() {
-        return new BodyArmorAction(AbstractDungeon.player, AbstractDungeon.player, 1, block, false);
+        BodyArmorAction result = new BodyArmorAction(AbstractDungeon.player, AbstractDungeon.player, 1, block, false);
+
+        ReflectionHacks
+                .setPrivate(result, AbstractGameAction.class, "duration", 0);
+
+        return result;
     }
 
     @SpirePatch(
@@ -27,7 +32,7 @@ public class BodyArmorActionState implements CurrentActionState {
     public static class HalfDoneActionPatch {
         public static void Postfix(BodyArmorAction _instance) {
             // Force the action to stay in the the manager until cards are selected
-            if (AbstractDungeon.isScreenUp) {
+            if (!AbstractDungeon.handCardSelectScreen.wereCardsRetrieved && AbstractDungeon.isScreenUp) {
                 _instance.isDone = false;
             }
         }
