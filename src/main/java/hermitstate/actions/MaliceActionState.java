@@ -47,7 +47,7 @@ public class MaliceActionState implements CurrentActionState {
     public static class HalfDoneActionPatch {
         public static void Postfix(MaliceAction _instance) {
             // Force the action to stay in the the manager until cards are selected
-            if (AbstractDungeon.isScreenUp) {
+            if (!AbstractDungeon.handCardSelectScreen.wereCardsRetrieved && AbstractDungeon.isScreenUp) {
                 _instance.isDone = false;
             }
         }
