@@ -59,6 +59,8 @@ public class HermitState implements PostInitializeSubscriber, EditRelicsSubscrib
     private void populateActionsFactory() {
         StateFactories.actionByClassMap
                 .put(AdaptAction.class, new ActionState.ActionFactories(action -> new AdaptActionState(action)));
+        StateFactories.actionByClassMap
+                .put(EternalFormAction.class, new ActionState.ActionFactories(action -> new EternalFormActionState(action)));
     }
 
     private void populateCurrentActionsFactory() {
