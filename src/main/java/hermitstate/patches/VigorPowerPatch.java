@@ -32,16 +32,18 @@ public class VigorPowerPatch {
         public static void Postfix(boolean shouldLog) {
             GameActionManager m = AbstractDungeon.actionManager;
             if (VigorPatch.thisRun) {
-                if (AbstractDungeon.player.hasPower(BigShotPower.POWER_ID)) {
+                while (VigorPatch.isActive > 0) {
+                    if (AbstractDungeon.player.hasPower(BigShotPower.POWER_ID)) {
 
-                    AbstractPlayer p = AbstractDungeon.player;
-                    AbstractPower pow = AbstractDungeon.player.getPower(BigShotPower.POWER_ID);
-                    pow.flash();
-                    AbstractDungeon.actionManager
-                            .addToBottom(new ApplyPowerAction(p, p, new VigorPower(p, pow.amount), pow.amount));
+                        AbstractPlayer p = AbstractDungeon.player;
+                        AbstractPower pow = AbstractDungeon.player.getPower(BigShotPower.POWER_ID);
+                        pow.flash();
+                        AbstractDungeon.actionManager
+                                .addToBottom(new ApplyPowerAction(p, p, new VigorPower(p, pow.amount), pow.amount));
+                    }
+                    VigorPatch.thisRun = false;
+                    VigorPatch.isActive--;
                 }
-                VigorPatch.thisRun = false;
-                VigorPatch.isActive = 0;
             }
 
         }
