@@ -8,6 +8,7 @@ import hermit.patches.EndOfTurnPatch;
 import hermit.patches.SelectScreenPatch;
 import hermit.patches.VigorPatch;
 import hermit.powers.Bounty;
+import hermit.relics.BlackPowder;
 import savestate.CardState;
 import savestate.SaveState;
 import savestate.StateElement;
@@ -24,6 +25,7 @@ public class HermitStateElement implements StateElement {
     private final int deadon_count;
     private final boolean vigorThisRun;
     private final int vigorIsActive;
+    private final int powderCharge;
 
     private static final String CURSED_WEAPON_ID = "hermit:CursedWeapon";
     private static final String GOLDEN_BULLET_ID = "hermit:GoldenBullet";
@@ -42,6 +44,13 @@ public class HermitStateElement implements StateElement {
         } else {
             this.handCloneIndeces = null;
         }
+
+        if (AbstractDungeon.player.hasRelic(BlackPowder.ID)) {
+            BlackPowder blackPowder = (BlackPowder) AbstractDungeon.player.getRelic(BlackPowder.ID);
+            powderCharge = blackPowder.PowderCharge;
+        } else {
+            powderCharge = 0;
+        }
     }
 
     public HermitStateElement(String jsonState) {
@@ -50,6 +59,7 @@ public class HermitStateElement implements StateElement {
         this.deadon_count = parsed.get("deadon_count").getAsInt();
         this.vigorIsActive = parsed.get("deadon_count").getAsInt();
         this.vigorThisRun = parsed.get("deadon_count").getAsBoolean();
+        this.powderCharge = parsed.get("powder_charge").getAsInt();
 
         this.handCloneIndeces = null;
     }
@@ -58,6 +68,7 @@ public class HermitStateElement implements StateElement {
         this.deadon_count = elementJson.get("deadon_count").getAsInt();
         this.vigorIsActive = elementJson.get("deadon_count").getAsInt();
         this.vigorThisRun = elementJson.get("deadon_count").getAsBoolean();
+        this.powderCharge = elementJson.get("powder_charge").getAsInt();
 
         JsonElement tempHandClone = elementJson.get("hand_clone");
         if (tempHandClone.isJsonNull()) {
@@ -74,6 +85,7 @@ public class HermitStateElement implements StateElement {
         statJson.addProperty("deadon_count", deadon_count);
         statJson.addProperty("vigor_this_run", vigorThisRun);
         statJson.addProperty("vigor_is_active", vigorIsActive);
+        statJson.addProperty("powder_charge", powderCharge);
 
         if (handCloneIndeces == null) {
             statJson.add("hand_clone", JsonNull.INSTANCE);
@@ -91,6 +103,7 @@ public class HermitStateElement implements StateElement {
         statJson.addProperty("deadon_count", deadon_count);
         statJson.addProperty("vigor_this_run", vigorThisRun);
         statJson.addProperty("vigor_is_active", vigorIsActive);
+        statJson.addProperty("powder_charge", powderCharge);
 
         if (handCloneIndeces == null) {
             statJson.add("hand_clone", JsonNull.INSTANCE);
@@ -112,6 +125,11 @@ public class HermitStateElement implements StateElement {
         } else {
             SelectScreenPatch.handClone = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
             SelectScreenPatch.handClone.group = handForIndexArray(handCloneIndeces);
+        }
+
+        if (AbstractDungeon.player.hasRelic(BlackPowder.ID)) {
+            BlackPowder blackPowder = (BlackPowder) AbstractDungeon.player.getRelic(BlackPowder.ID);
+            blackPowder.PowderCharge = powderCharge;
         }
     }
 
